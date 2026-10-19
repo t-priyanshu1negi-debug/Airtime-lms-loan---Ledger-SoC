@@ -1,0 +1,98 @@
+# Two read APIs.
+# reportingData: recon, billed versus collected, audit chain, watermarks.
+# accountLedgerRecords: journal + journal_line. subscriberRef loads the loan context through WebClient.
+
+type Query {
+    reportingData(rail: String): ReportingData!
+    accountLedgerRecords(subscriberRef: String, advanceId: ID, marketCode: String): AccountLedgerResult!
+}
+
+type AccountLedgerResult {
+    records: [AccountLedgerRecord!]!
+    loanContext: LoanContext
+    loanContextStatus: String!
+}
+
+type AccountLedgerRecord {
+    journalId: ID!
+    sourceEventId: String!
+    advanceId: ID!
+    journalType: String!
+    marketCode: String!
+    currency: String!
+    postedAt: String!
+    lines: [AccountLedgerLine!]!
+}
+
+type AccountLedgerLine {
+    lineId: ID!
+    accountCode: String!
+    side: String!
+    amount: String!
+}
+
+type ReportingData {
+    reconWindows: [ReconWindow!]!
+    billedVsCollected: [BilledVsCollected!]!
+    auditChain: [AuditLink!]!
+    watermarks: [Watermark!]!
+}
+
+type ReconWindow {
+    windowId: ID!
+    windowStart: String!
+    windowEnd: String!
+    quotedTotal: String!
+    ingestedTotal: String!
+    postedTotal: String!
+    filteredCount: String!
+    breakCount: Int!
+    exceptionOwner: String
+}
+
+type BilledVsCollected {
+    rail: String!
+    businessDate: String!
+    billed: String!
+    collected: String!
+}
+
+type AuditLink {
+    seq: String!
+    entityType: String!
+    entityId: String!
+    action: String!
+    payloadHash: String!
+    prevHash: String!
+    chainHash: String!
+    createdAt: String!
+}
+
+type Watermark {
+    projectionName: String!
+    topic: String!
+    partitionNo: Int!
+    lastOffset: String!
+    updatedAt: String!
+}
+
+type LoanContext {
+    subscriberRef: String!
+    advances: [LoanAdvance!]!
+}
+
+type LoanAdvance {
+    advanceId: ID!
+    status: String!
+    currency: String
+    dueDate: String
+    principalResidual: String
+    feeResidual: String
+    allocations: [LoanAllocation!]!
+}
+
+type LoanAllocation {
+    component: String!
+    seq: Int
+    amount: String
+}

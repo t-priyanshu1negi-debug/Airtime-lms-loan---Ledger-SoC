@@ -1,0 +1,12 @@
+package com.lms.ledger;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class LedgerMgmtApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(LedgerMgmtApplication.class, args);
+    }
+}
